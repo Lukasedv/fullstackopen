@@ -1,0 +1,8 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: 304 return HTML   
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: 304 return javascript spa.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: 304 return content data.json
+browser->server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+server-->browser: 304 return favicon.js 
