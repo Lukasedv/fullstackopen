@@ -8,6 +8,14 @@ const Button = ({ handleClick, text }) => (
   </div>
 )
 
+const Anecdote = ({ anecdote, votes }) => (
+  <div>
+    <p>{anecdote}</p>
+    <p>Has {votes} votes</p>
+  </div>
+)
+
+
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max)
 }
@@ -25,7 +33,9 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVote] = useState([0,0,0,0,0,0,0])
-
+  
+  const votd = votes.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+  
   const handleVote = () => {
     const index = selected
     const new_votes = [...votes]
@@ -36,10 +46,10 @@ const App = () => {
   
   return (
     <div>
-      {anecdotes[selected]}
-      <p>Has {votes[selected]} votes</p>
+      <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]}/>
       <Button text="next anecdote" handleClick={() => setSelected(getRandomInt(anecdotes.length))} />
       <Button text="vote" handleClick={handleVote} />
+      <Anecdote anecdote={anecdotes[votd]} votes={votes[votd]}/>
     </div>
   )
 }
