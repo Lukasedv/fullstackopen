@@ -35,7 +35,7 @@ const App = () => {
   const [votes, setVote] = useState([0,0,0,0,0,0,0])
   
   const votd = votes.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-  
+
   const handleVote = () => {
     const index = selected
     const new_votes = [...votes]
@@ -46,9 +46,11 @@ const App = () => {
   
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]}/>
       <Button text="next anecdote" handleClick={() => setSelected(getRandomInt(anecdotes.length))} />
       <Button text="vote" handleClick={handleVote} />
+      <h1>Anecdote with most votes</h1>
       <Anecdote anecdote={anecdotes[votd]} votes={votes[votd]}/>
     </div>
   )
