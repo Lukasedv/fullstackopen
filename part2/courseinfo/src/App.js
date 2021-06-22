@@ -6,8 +6,8 @@ const Header = ({ course }) => {
     )
   }
   
-  const Total = ({ course }) => {
-    const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+  const Total = ({ parts }) => {
+    const sum = parts.reduce((a,v) =>  a = a + v.exercises , 0 )
     return(
       <p>Number of exercises {sum}</p>
     ) 
@@ -36,7 +36,7 @@ const Header = ({ course }) => {
       <div>
         <Header course={course} />
         <Content parts={course.parts} />
-        <Total course={course} />
+        <Total parts={course.parts} />
       </div>
     )
   }
@@ -63,7 +63,7 @@ const Header = ({ course }) => {
         },
         {
             name: 'Azure Fundamentals',
-            exercises: 2,
+            exercises: 10,
             id: 4
         }
       ]
