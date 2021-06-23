@@ -23,13 +23,12 @@ const App = () => {
     <div>
       <h1>Countries</h1>
       <input value={searchCountry} onChange={handleSearch} />
-      <div>
       {countries.filter(country => country.name.toLowerCase().includes(searchCountry)).map(filteredCountry =>
         <p key={filteredCountry.name}>{filteredCountry.name}</p>
         )}
-        </div>
-    </div>
+      </div>
   )
+
 }
 
 export default App
