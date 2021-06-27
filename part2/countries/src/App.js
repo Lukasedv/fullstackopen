@@ -3,7 +3,6 @@ import axios from 'axios'
 
 const App = () => {
   const [ countries, setCountries] = useState([])
-  const [ filteredCountries, setFilteredCountries] = useState([])
   const [ searchCountry, setSearchCountry] = useState('')
 
   useEffect(() => {
@@ -13,11 +12,11 @@ const App = () => {
       .then(response => {
         console.log('promise fulfilled')
         setCountries(response.data)
-        setFilteredCountries(response.data)
       })
   }, [])
 
-  const Display = ({ countries }) => {
+  const Display = ({ countries, handleSearch }) => {
+    console.log(countries.length)
     if(countries.length > 10) {
       return(
         <div>
@@ -28,24 +27,32 @@ const App = () => {
       return(
         <div>
         {countries.map(country => 
-          <Country country={country} format="long" />
+          <Country key={country.name} country={country} format="long" />
           )}
         </div>)
     } else {
     return(
       <div>
         {countries.map(country => 
-          <Country country={country} format="short" />
+          <Country
+            key={country.name} 
+            country={country} 
+            format="short"
+            handleSearch={handleSearch}
+          />
           )}
       </div>
     )
   }
   }
 
-  const Country = ({ country, format }) => {
+  const Country = ({ country, format, handleSearch }) => {
     if(format === "short") {
     return(
-      <div>{country.name}</div>
+      <div>
+        {country.name}
+        <button onClick={handleSearch} value={country.name}>Show</button>
+      </div>
     )} else if(format === "long") {
       return(
       <div>
@@ -67,9 +74,14 @@ const App = () => {
 
   const handleSearch = (event) => {
     setSearchCountry(event.target.value)
-    setFilteredCountries(countries.filter(country => country.name.toLowerCase().includes(event.target.value)))
-  }  
+    console.log("Searched for", event.target.value)
+  }
 
+  const filteredCountries = (searchCountry) => {
+    return(
+      countries.filter(country => country.name.toLowerCase().includes(searchCountry.toLowerCase()))
+    )
+  }
 
   return (
     <div>
@@ -79,7 +91,7 @@ const App = () => {
         value={searchCountry} 
         onChange={handleSearch} 
       />
-      <Display countries={filteredCountries}/>
+      <Display countries={filteredCountries(searchCountry)} handleSearch={handleSearch}/>
     </div>
   )
 
