@@ -67,7 +67,7 @@ const App = () => {
 
   const handleSearch = (event) => {
     setSearchCountry(event.target.value)
-    setFilteredCountries(countries.filter(country => country.name.toLowerCase().includes(searchCountry)))
+    setFilteredCountries(countries.filter(country => country.name.toLowerCase().includes(event.target.value)))
   }  
 
 
