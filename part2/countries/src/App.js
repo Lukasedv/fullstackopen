@@ -4,6 +4,7 @@ import axios from 'axios'
 const App = () => {
   const [ countries, setCountries] = useState([])
   const [ searchCountry, setSearchCountry] = useState('')
+  const api_key = process.env.REACT_APP_API_KEY
 
   useEffect(() => {
     console.log('effect')
@@ -16,7 +17,6 @@ const App = () => {
   }, [])
 
   const Display = ({ countries, handleSearch }) => {
-    console.log(countries.length)
     if(countries.length > 10) {
       return(
         <div>
@@ -27,7 +27,11 @@ const App = () => {
       return(
         <div>
         {countries.map(country => 
-          <Country key={country.name} country={country} format="long" />
+          <Country 
+            key={country.name} 
+            country={country} 
+            format="long" 
+          />
           )}
         </div>)
     } else {
@@ -66,15 +70,15 @@ const App = () => {
         )}
         </ul>
         <img src={country.flag} width="100" alt={country.name}></img>
-
+        <h3>The weather in {country.capital}</h3>
       </div>
       )
     }
   }
 
+
   const handleSearch = (event) => {
     setSearchCountry(event.target.value)
-    console.log("Searched for", event.target.value)
   }
 
   const filteredCountries = (searchCountry) => {
@@ -91,7 +95,10 @@ const App = () => {
         value={searchCountry} 
         onChange={handleSearch} 
       />
-      <Display countries={filteredCountries(searchCountry)} handleSearch={handleSearch}/>
+      <Display 
+        countries={filteredCountries(searchCountry)} 
+        handleSearch={handleSearch}
+      />
     </div>
   )
 
