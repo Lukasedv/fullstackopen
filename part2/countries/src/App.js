@@ -71,9 +71,41 @@ const App = () => {
         </ul>
         <img src={country.flag} width="100" alt={country.name}></img>
         <h3>The weather in {country.capital}</h3>
+        <Weather capital={country.capital} />
       </div>
       )
     }
+  }
+
+  const Weather = ({capital}) => {
+    const [weather, setWeather] = useState({})
+
+    useEffect(() => {
+      const params = {
+        access_key: api_key,
+        query: capital
+      }
+      console.log(params, capital)
+      axios
+      .get('http://api.weatherstack.com/current', {params})
+      .then(response => {
+        setWeather(response.data)
+        console.log(response.data)
+      })
+    }, [capital])
+
+    if(Object.keys(weather).length !== 0) {
+    return(
+      <div>
+        <img src={weather.current.weather_icons[0]} alt={weather.current.weather_descriptions[0]}></img>
+        <p><b>Temperature:</b>{weather.current.temperature} Celcius</p>
+        <p><b>Wind:</b>{weather.current.wind_speed} {weather.current.wind_dir}</p>
+      </div>
+    )
+  } else {
+    return(<p>Nothing yet</p>)
+  }
+
   }
 
 
