@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Person from "./components/Person"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
@@ -12,14 +12,13 @@ const App = () => {
   const [ searchPerson, setSearchPerson] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
+
   console.log('render', persons.length, 'persons')
 
   const userExists = (name) => {
@@ -38,10 +37,17 @@ const App = () => {
     if(userExists(newName)) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+
+      personService
+      .create(nameObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+
     }
+
   }
 
   const handleNameChange = (event) => {
@@ -69,7 +75,7 @@ const App = () => {
         onNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      {persons.filter(person => person.name.includes(searchPerson)).map(filteredPerson =>
+      {persons.filter(person => person.name.toLowerCase().includes(searchPerson.toLowerCase())).map(filteredPerson =>
         <Person key={filteredPerson.name} name={filteredPerson.name} number={filteredPerson.number} />
         )}
     </div>
