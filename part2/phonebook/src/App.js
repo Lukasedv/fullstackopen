@@ -19,8 +19,6 @@ const App = () => {
       })
   }, [])
 
-  console.log('render', persons.length, 'persons')
-
   const userExists = (name) => {
     return persons.some(function(el) {
       return el.name === name;
@@ -44,11 +42,19 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        console.log(returnedPerson, "added")
       })
-
     }
-
   }
+
+  const removePerson = (person) => {
+    if (window.confirm(`Do you really want to delete ${person.name}?`)) {
+
+    const newPersons = persons.filter((searchperson) => searchperson.id !== person.id)
+      personService.remove(person.id)
+      .then(setPersons(newPersons))
+    }
+}
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -76,7 +82,12 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {persons.filter(person => person.name.toLowerCase().includes(searchPerson.toLowerCase())).map(filteredPerson =>
-        <Person key={filteredPerson.name} name={filteredPerson.name} number={filteredPerson.number} />
+        <Person 
+        key={filteredPerson.name} 
+        name={filteredPerson.name} 
+        number={filteredPerson.number} 
+        removePerson={() => removePerson(filteredPerson)}
+        />
         )}
     </div>
   )
