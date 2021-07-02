@@ -33,7 +33,17 @@ const App = () => {
     }
     console.log(newName);
     if(userExists(newName)) {
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to phonebook, do you want to edit the number?`)) {
+      const person = persons.find(p => p.name === newName)
+      const changedPerson = { ...person, number: newNumber }
+      const id = person.id
+      personService
+      .update(id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+      }) } else {
+
+      }
     } else {
 
       personService
