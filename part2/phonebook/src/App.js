@@ -12,7 +12,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchPerson, setSearchPerson] = useState('')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState({})
 
   useEffect(() => {
     personService
@@ -34,7 +34,6 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    console.log(newName);
     if(userExists(newName)) {
       if(window.confirm(`${newName} is already added to phonebook, do you want to edit the number?`)) {
       const person = persons.find(p => p.name === newName)
@@ -43,12 +42,24 @@ const App = () => {
       personService
       .update(id, changedPerson)
       .then(returnedPerson => {
-        setMessage(`${newName} has been updated`)
+        setMessage({
+          content: `${newName} has been updated`,
+          type: "message"
+        })
         setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
         setTimeout(() => {
           setMessage(null)
         }, 2000)
-      }) } else {
+
+      })
+      .catch(error => {
+        setMessage({
+          content: `${newName} has already been deleted`,
+          type: "error"
+        })
+      })
+    
+    } else {
 
       }
     } else {
@@ -59,7 +70,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-        setMessage(`${newName} has been added`)
+        setMessage({
+          content: `${newName} has been added`,
+          type: "message"
+        })
         setTimeout(() => {
           setMessage(null)
         }, 2000)
@@ -74,11 +88,20 @@ const App = () => {
       personService.remove(person.id)
       .then(
         setPersons(newPersons),
-        setMessage(`${person.name} has been removed`),
+        setMessage({
+          content: `${person.name} has been deleted`,
+          type: "message"
+        }),
         setTimeout(() => {
           setMessage(null)
         }, 2000)
         )
+        .catch(error => {
+          setMessage({
+            content: `${person.name} was already deleted`,
+            type: "error"
+          })
+        })
     }
 }
 
