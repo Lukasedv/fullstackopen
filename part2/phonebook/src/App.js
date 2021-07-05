@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from "./components/Person"
 import Filter from "./components/Filter"
+import Notification from "./components/Notification"
 import PersonForm from "./components/PersonForm"
+import "./index.css"
 
 
 const App = () => {
@@ -10,6 +12,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchPerson, setSearchPerson] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -40,7 +43,11 @@ const App = () => {
       personService
       .update(id, changedPerson)
       .then(returnedPerson => {
+        setMessage(`${newName} has been updated`)
         setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+        setTimeout(() => {
+          setMessage(null)
+        }, 2000)
       }) } else {
 
       }
@@ -52,7 +59,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-        console.log(returnedPerson, "added")
+        setMessage(`${newName} has been added`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 2000)
       })
     }
   }
@@ -62,7 +72,13 @@ const App = () => {
 
     const newPersons = persons.filter((searchperson) => searchperson.id !== person.id)
       personService.remove(person.id)
-      .then(setPersons(newPersons))
+      .then(
+        setPersons(newPersons),
+        setMessage(`${person.name} has been removed`),
+        setTimeout(() => {
+          setMessage(null)
+        }, 2000)
+        )
     }
 }
 
@@ -81,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter value={searchPerson} onChange={handleSearch} />
       <h3>add a new person</h3>
       <PersonForm 
