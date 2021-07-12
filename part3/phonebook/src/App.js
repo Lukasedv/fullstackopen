@@ -53,11 +53,13 @@ const App = () => {
 
       })
       .catch(error => {
+        console.log(error.response.data)
         setMessage({
-          content: `${newName} has already been deleted`,
+          content: JSON.stringify(error.response.data),
           type: "error"
         })
-      })
+        
+        })
     
     } else {
 
