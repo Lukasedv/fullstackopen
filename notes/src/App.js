@@ -3,7 +3,6 @@ import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import noteService from './services/notes'
-import "./index.css"
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -15,10 +14,9 @@ const App = () => {
     noteService
       .getAll()
       .then(initialNotes => {
-        setNotes(initialNotes)
-      })
+      setNotes(initialNotes)
+    })
   }, [])
-  console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
     event.preventDefault()
@@ -26,20 +24,14 @@ const App = () => {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() > 0.5,
-      id: notes.length + 1,
     }
 
     noteService
       .create(noteObject)
-      .then(returnedNote => {
+        .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
         setNewNote('')
       })
-  }
-
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
   }
 
   const toggleImportanceOf = id => {
@@ -47,19 +39,23 @@ const App = () => {
     const changedNote = { ...note, important: !note.important }
   
     noteService
-      .update(id, changedNote)
+    .update(id, changedNote)
       .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setNotes(notes.filter(n => n.id !== id))
-      })
+      setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+    })
+    .catch(error => {
+      setErrorMessage(
+        `Note '${note.content}' was already removed from server`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })    
+  }
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
   }
 
   const notesToShow = showAll
@@ -77,10 +73,10 @@ const App = () => {
       </div>   
       <ul>
         {notesToShow.map(note => 
-            <Note 
-            key={note.id} 
-            note={note} 
-            toggleImportance={() => toggleImportanceOf(note.id)}
+            <Note
+              key={note.id}
+              note={note} 
+              toggleImportance={() => toggleImportanceOf(note.id)}
             />
         )}
       </ul>
