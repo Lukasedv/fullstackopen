@@ -72,17 +72,17 @@ describe('most blogs', () => {
           }
       ]
   
-    test('when list has only one blog, returns that author and count of blogs', () => {
-      const result = listHelper.mostBlogs(listWithOneBlog)
+    test('when list has only one blog, returns that author and its likes', () => {
+      const result = listHelper.mostLikes(listWithOneBlog)
       expect(result).toEqual(
-        { author: 'Edsger W. Dijkstra', blogs: 1 }
+        { author: 'Edsger W. Dijkstra', likes: 5 }
       )
     })
 
-    test('when list has multiple blogs, returns the author with most likes and count of blogs', () => {
-        const result = listHelper.mostBlogs(blogs)
+    test('when list has multiple blogs, returns the one with most likes with likes summed', () => {
+        const result = listHelper.mostLikes(blogs)
         expect(result).toEqual(
-            { author: 'Robert C. Martin', blogs: 4 }
+          { author: 'Edsger W. Dijkstra', likes: 17 }
         )
       })
   })
