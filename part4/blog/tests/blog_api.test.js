@@ -57,6 +57,26 @@ test('HTTP POST successfully creates a new blog post', async () => {
   )
 })
 
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'This is a blog without likes',
+    author: 'Lukas Lundin',
+    url: 'localhost'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const likes = blogsAtEnd.map(blog => blog.likes)
+  expect(likes[likes.length - 1]).toBe(0)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
