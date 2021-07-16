@@ -28,6 +28,12 @@ test('all blogs are returned', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
+test('all blogs have unique identifier field named "id"', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body.every(blog => blog.id)).toBeTruthy()
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
