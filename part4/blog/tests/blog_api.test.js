@@ -34,6 +34,29 @@ test('all blogs have unique identifier field named "id"', async () => {
   expect(response.body.every(blog => blog.id)).toBeTruthy()
 })
 
+test('HTTP POST successfully creates a new blog post', async () => {
+  const newBlog = {
+    title: 'This is an added blog',
+    author: 'Lukas Lundin',
+    url: 'localhost',
+    likes: 5
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const title = blogsAtEnd.map(blog => blog.title)
+  expect(title).toContain(
+    'This is an added blog'
+  )
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
