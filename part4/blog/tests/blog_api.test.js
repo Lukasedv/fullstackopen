@@ -98,6 +98,28 @@ test('blog without title and url is not added', async () => {
 })
 })
 
+describe('Edit a blog', () => {
+  test('edit blog likes', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+
+    const updatedBlog = {
+      likes: 50
+    }
+
+    await api
+      .put(`/api/blogs/${blogToEdit.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    const likes = blogsAtEnd.map(blog => blog.likes)
+
+    expect(likes[0]).toBe(updatedBlog.likes)
+  })
+})
+
 
 describe('Delete a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
