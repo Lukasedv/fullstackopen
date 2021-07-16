@@ -15,6 +15,7 @@ beforeEach(async () => {
   }
 })
 
+describe('Initial blogs', () => {
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -34,6 +35,9 @@ test('all blogs have unique identifier field named "id"', async () => {
   expect(response.body.every(blog => blog.id)).toBeTruthy()
 })
 
+})
+
+describe('Adding blogs', () => {
 test('HTTP POST successfully creates a new blog post', async () => {
   const newBlog = {
     title: 'This is an added blog',
@@ -91,6 +95,29 @@ test('blog without title and url is not added', async () => {
   const blogsAtEnd = await helper.blogsInDb()
 
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+})
+
+
+describe('Delete a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const title = blogsAtEnd.map(blog => blog.title)
+
+    expect(title).not.toContain(blogToDelete.title)
+  })
 })
 
 
