@@ -1,0 +1,34 @@
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "notes": [],
+    "username": "mluukkai",
+    "name": "Matti Luukkainen",
+    "password": "salainen"
+}
+
+###
+GET http://localhost:3001/api/users
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Mattis second note",
+    "important": true,
+    "userId": "60f16eb5ef8a9b176db0cc43"
+}
+
+###
+GET http://localhost:3001/api/notes
+
+###
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "mluukkai",
+    "password": "salainen"
+}
