@@ -14,11 +14,12 @@ GET http://localhost:3001/api/users
 ###
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MGYxNmViNWVmOGE5YjE3NmRiMGNjNDMiLCJpYXQiOjE2MjY4MDk0NTZ9.rbluwJ-sIYUuSCTLO4_ZVxzxjgsmMmJcBux3fz6O2YQ
 
 {
-    "content": "Mattis second note",
+    "content": "Mattis third note",
     "important": true,
-    "userId": "60f16eb5ef8a9b176db0cc43"
+    "user": "60f16eb5ef8a9b176db0cc43"
 }
 
 ###
