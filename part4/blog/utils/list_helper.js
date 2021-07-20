@@ -31,7 +31,6 @@ const dummy = (blogs) => {
       .value()
     
     const topLikes = authorLikes.reduce((max, obj) => (max.likes > obj.likes) ? max : obj);
-    console.log(topLikes)
     return topLikes
 
   }
