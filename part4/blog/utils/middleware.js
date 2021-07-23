@@ -29,7 +29,6 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = async (request, response, next) => {
   if(!request.token) {
-    console.log('token not received by user extractor')
     request.user = null
   } else {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)

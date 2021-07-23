@@ -5,10 +5,10 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
-
+const User = require('../models/user')
 
 const bcrypt = require('bcrypt')
-const User = require('../models/user')
+
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -23,6 +23,8 @@ beforeEach(async () => {
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
+
+  
 })
 
 
@@ -161,8 +163,22 @@ test('all blogs have unique identifier field named "id"', async () => {
 
 })
 
+
 describe('Adding blogs', () => {
+
 test('HTTP POST successfully creates a new blog post', async () => {
+  const loginUser =
+  {
+    username: "root",
+    password: "sekret"
+  }
+
+  const response = await api
+  .post('/api/login')
+  .send(loginUser)
+  .expect(200)
+
+
   const newBlog = {
     title: 'This is an added blog',
     author: 'Lukas Lundin',
@@ -172,6 +188,7 @@ test('HTTP POST successfully creates a new blog post', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'Bearer ' + response.body.token)
     .send(newBlog)
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -185,7 +202,36 @@ test('HTTP POST successfully creates a new blog post', async () => {
   )
 })
 
+test('adding a blog fails with the proper status code 401 Unauthorized if a token is not provided', async () => {
+
+  const newBlog = {
+    title: 'This is an unauthorized blog',
+    author: 'Lukas Lundin',
+    url: 'localhost',
+    likes: 5
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+
+})
+
 test('if the likes property is missing from the request, it will default to the value 0', async () => {
+  const loginUser =
+  {
+    username: "root",
+    password: "sekret"
+  }
+
+  const response = await api
+  .post('/api/login')
+  .send(loginUser)
+  .expect(200)
+
+  
   const newBlog = {
     title: 'This is a blog without likes',
     author: 'Lukas Lundin',
@@ -195,6 +241,7 @@ test('if the likes property is missing from the request, it will default to the 
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', 'Bearer ' + response.body.token)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
@@ -206,6 +253,17 @@ test('if the likes property is missing from the request, it will default to the 
 })
 
 test('blog without title and url is not added', async () => {
+  const loginUser =
+  {
+    username: "root",
+    password: "sekret"
+  }
+
+  const response = await api
+  .post('/api/login')
+  .send(loginUser)
+  .expect(200)
+
   const newBlog = {
     url: "localhost",
     likes: 0
@@ -214,6 +272,7 @@ test('blog without title and url is not added', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', 'Bearer ' + response.body.token)
     .expect(400)
 
   const blogsAtEnd = await helper.blogsInDb()
@@ -247,18 +306,40 @@ describe('Edit a blog', () => {
 
 describe('Delete a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
+    const loginUser =
+    {
+      username: "root",
+      password: "sekret"
+    }
+
+    const response = await api
+    .post('/api/login')
+    .send(loginUser)
+    .expect(200)
+
+    const newBlog = {
+      title: 'This is a blog to delete',
+      author: 'Lukas Lundin',
+      url: 'localhost',
+      likes: 5
+    }
+  
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + response.body.token)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+    const blogToDelete = blogsAtStart[blogsAtStart.length - 1]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', 'Bearer ' + response.body.token)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
-
-    expect(blogsAtEnd).toHaveLength(
-      helper.initialBlogs.length - 1
-    )
 
     const title = blogsAtEnd.map(blog => blog.title)
 
