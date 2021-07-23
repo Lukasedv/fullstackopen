@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhODZhNDNmNGUzODA3MTNlZWNkOWMiLCJpYXQiOjE2MjcwMzEyMjJ9.qeKMv2l6e3c1giPmD0-6EVd4Bv0v-sZrdNbjIfdVPtc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhODZhNDNmNGUzODA3MTNlZWNkOWMiLCJpYXQiOjE2MjcwMzc2NTR9.8MFtz58HE9cAoqRGFHnBB4ERbdgFj6KC0TGklI9pON8
 
 {
-  "title": "This is a blog post",
-  "author": "Hamilton",
+  "title": "Another blog post 5",
+  "author": "Lyyke",
   "url": "http:google.com",
   "likes": 1
 }
