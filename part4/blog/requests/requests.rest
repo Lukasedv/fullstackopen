@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhODZhNDNmNGUzODA3MTNlZWNkOWMiLCJpYXQiOjE2MjcwMzkyNjd9.ALHOTfLzWBabdbPUn49RIDgqGI5v8vTATvu06k-cMIc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhYWVlNDcxZWFhMzQwODY0YzZmYjciLCJpYXQiOjE2MjcwNDUwMTl9.rqS1CL6gNd4l1KYLN3_Ginjeuq4Sju7uWPLdbmEt58o
 
 {
-  "title": "Another blog post 5",
+  "title": "Blog to delete",
   "author": "Lyyke",
   "url": "http:google.com",
   "likes": 1
@@ -11,14 +11,14 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a
 
 ### Delete with right user
 
-DELETE http://localhost:3003/api/blogs/60faa9895d829e276bb5f960
+DELETE http://localhost:3003/api/blogs/60fabce2bdd8087eb3bded8d
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhODZhNDNmNGUzODA3MTNlZWNkOWMiLCJpYXQiOjE2MjcwMzkyNjd9.ALHOTfLzWBabdbPUn49RIDgqGI5v8vTATvu06k-cMIc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhYWVlNDcxZWFhMzQwODY0YzZmYjciLCJpYXQiOjE2MjcwNDUwMTl9.rqS1CL6gNd4l1KYLN3_Ginjeuq4Sju7uWPLdbmEt58o
 
 ### Delete with wrong user
 
 
-DELETE http://localhost:3003/api/blogs/60faa9895d829e276bb5f960
+DELETE http://localhost:3003/api/blogs/60faaf1771eaa340864c6fce
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYwZmE4Njc2N2U1NDlhMDY1YjNlZjRjZSIsImlhdCI6MTYyNzAzOTM0MX0.7GUUlVFugR4xRI0x06EETwovweCM5zT_kLvV3wmuf-0
 
