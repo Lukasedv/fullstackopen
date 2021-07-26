@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login' 
 
@@ -11,6 +12,8 @@ const App = () => {
   const [author, setAuthor] = useState('') 
   const [url, setUrl] = useState('') 
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,7 +45,15 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setMessage('Logged in successfully')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
+      setMessage('Error logging in')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
 
     }
   }
@@ -76,6 +87,10 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
+        setMessage('Blog added')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
   }
 
@@ -154,6 +169,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} />
       {user === null ?
       loginForm() :
       blogForm()
