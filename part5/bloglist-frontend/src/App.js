@@ -7,6 +7,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
+  const [title, setTitle] = useState('') 
+  const [author, setAuthor] = useState('') 
+  const [url, setUrl] = useState('') 
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -58,6 +61,24 @@ const App = () => {
     }
   }
 
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url,
+    }
+
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      })
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -82,6 +103,44 @@ const App = () => {
     </form>      
   )
 
+  const blogForm = () => (
+    
+    <form onSubmit={addBlog}>
+        <p>
+          {user.name} logged in
+          <button onClick={handleLogout} type="logout">log out</button>
+        </p>
+      <div>
+        title
+          <input
+          type="text"
+          value={title}
+          name="title"
+          onChange={({ target }) => setTitle(target.value)}
+        />
+      </div>
+      <div>
+        author
+          <input
+          type="text"
+          value={author}
+          name="author"
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+      </div>
+      <div>
+        url
+          <input
+          type="text"
+          value={url}
+          name="url"
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+      <button type="submit">Add</button>
+    </form>      
+  )
+
   if (user === null) {
     return (
       <div>
@@ -97,12 +156,7 @@ const App = () => {
       <h2>blogs</h2>
       {user === null ?
       loginForm() :
-      <div>
-        <p>
-          {user.name} logged in
-          <button onClick={handleLogout} type="logout">log out</button>
-        </p>
-      </div>
+      blogForm()
     }
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
