@@ -50,7 +50,7 @@ const App = () => {
         setMessage(null)
       }, 5000)
     } catch (exception) {
-      setMessage('Error logging in')
+      setMessage('Wrong username or password')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -160,6 +160,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={message} />
         {user === null && loginForm()}
       </div>
     )
