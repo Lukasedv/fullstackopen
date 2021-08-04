@@ -4,6 +4,8 @@ import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
+  const likeBlog = jest.fn()
+
   const blog =   {
     title: 'Component testing is done with react-testing-library',
     author: 'Lukas',
@@ -27,7 +29,7 @@ describe('<Blog />', () => {
 
   beforeEach(() => {
     component = render(
-      <Blog blog={blog} user={user}/>
+      <Blog blog={blog} user={user} likeBlog={likeBlog}/>
     )
   })
 
@@ -52,6 +54,16 @@ describe('<Blog />', () => {
 
     const div = component.container.querySelector('.togglableContent')
     expect(div).not.toHaveStyle('display: none')
+  })
+
+  test('after liking twice, the event handles is called twice', () => {
+
+    const button = component.getByText('Like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+    expect(likeBlog.mock.calls).toHaveLength(2)
+
+
   })
 
 
