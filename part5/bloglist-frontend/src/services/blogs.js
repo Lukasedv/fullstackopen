@@ -12,13 +12,25 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const create = async newObject => {
+const create = async blogObject => {
   const config = {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config)
+  const response = await axios.post(baseUrl, blogObject, config)
   return response.data
 }
 
-export default { getAll, setToken, create }
+const like = async (likeObject, id) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const likeUrl = baseUrl + '/' + id
+  console.log(likeUrl)
+
+  const response = await axios.put(likeUrl, likeObject, config)
+  return response.data
+}
+
+export default { getAll, setToken, create, like }

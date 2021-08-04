@@ -84,6 +84,23 @@ const App = () => {
       })
   }
 
+  const likeBlog = (blogObject, id) => {
+const objIndex = blogs.findIndex(obj => obj.id === id)
+const updatedObj = { ...blogs[objIndex], likes: blogObject.likes}
+
+const updatedBlogs = [
+  ...blogs.slice(0, objIndex),
+  updatedObj,
+  ...blogs.slice(objIndex + 1),
+]
+
+    blogService
+      .like(blogObject, id)
+      .then(returnedBlog => {
+        setBlogs(updatedBlogs)
+      })
+  }
+
   const loginForm = () => (
     <Togglable buttonLabel="log in">
       <LoginForm
@@ -128,7 +145,7 @@ const App = () => {
         </div>
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
       )}
     </div>
   )
