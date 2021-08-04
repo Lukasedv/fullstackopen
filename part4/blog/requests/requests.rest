@@ -11,16 +11,14 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a
 
 ### Delete with right user
 
-DELETE http://localhost:3003/api/blogs/60fabce2bdd8087eb3bded8d
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2FzZWR2IiwiaWQiOiI2MGZhYWVlNDcxZWFhMzQwODY0YzZmYjciLCJpYXQiOjE2MjcwNDUwMTl9.rqS1CL6gNd4l1KYLN3_Ginjeuq4Sju7uWPLdbmEt58o
+DELETE http://localhost:3003/api/blogs/60facd17ebcfe74ceaec5ecc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYwZmFjZDE3ZWJjZmU3NGNlYWVjNWVjOCIsImlhdCI6MTYyODA4MDYxMn0.FXnGW7VPbrPM49CFWn0cw4exfkcrIhQ81YGzIePoBEY
 
 ### Delete with wrong user
 
 
-DELETE http://localhost:3003/api/blogs/60faaf1771eaa340864c6fce
+DELETE http://localhost:3003/api/blogs/60facd17ebcfe74ceaec5ece
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYwZmE4Njc2N2U1NDlhMDY1YjNlZjRjZSIsImlhdCI6MTYyNzAzOTM0MX0.7GUUlVFugR4xRI0x06EETwovweCM5zT_kLvV3wmuf-0
 
 ###
 
