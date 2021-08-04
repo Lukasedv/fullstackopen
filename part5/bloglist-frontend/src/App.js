@@ -5,12 +5,12 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import loginService from './services/login' 
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -35,7 +35,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
     try {
       const user = await loginService.login({
         username, password,
@@ -43,7 +42,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -63,15 +62,22 @@ const App = () => {
 
   const handleLogout = async (event) => {
     event.preventDefault()
-    
+
     try {
       window.localStorage.removeItem('loggedBlogappUser')
       blogService.setToken(null)
       setUser(null)
       setUsername('')
       setPassword('')
+      setMessage('Logged out')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
-
+      setMessage('Error logging out')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -86,7 +92,7 @@ const App = () => {
 
   const likeBlog = (blogObject, id) => {
     const objIndex = blogs.findIndex(obj => obj.id === id)
-    const updatedObj = { ...blogs[objIndex], likes: blogObject.likes}
+    const updatedObj = { ...blogs[objIndex], likes: blogObject.likes }
 
     const updatedBlogs = [
       ...blogs.slice(0, objIndex),
@@ -96,9 +102,9 @@ const App = () => {
 
     blogService
       .like(blogObject, id)
-      .then(returnedBlog => {
+      .then(
         setBlogs(updatedBlogs)
-      })
+      )
   }
 
   const removeBlog = (id) => {
@@ -106,9 +112,9 @@ const App = () => {
 
     blogService
       .remove(id)
-      .then(returnedBlog => {
+      .then(
         setBlogs(updatedBlogs)
-      })
+      )
   }
 
   const loginForm = () => (
@@ -147,16 +153,16 @@ const App = () => {
       {user === null ?
         loginForm() :
         <div>
-        <p>
-          {user.name} logged in
-          <button onClick={handleLogout} type="logout">log out</button>
-        </p>
+          <p>
+            {user.name} logged in
+            <button onClick={handleLogout} type="logout">log out</button>
+          </p>
           {blogForm()}
         </div>
       }
       {blogs.sort(function (a, b) {
-  return b.likes - a.likes;
-}).map(blog =>
+        return b.likes - a.likes
+      }).map(blog =>
         <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={removeBlog} user={user}/>
       )}
     </div>
