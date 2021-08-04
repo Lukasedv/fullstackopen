@@ -85,17 +85,27 @@ const App = () => {
   }
 
   const likeBlog = (blogObject, id) => {
-const objIndex = blogs.findIndex(obj => obj.id === id)
-const updatedObj = { ...blogs[objIndex], likes: blogObject.likes}
+    const objIndex = blogs.findIndex(obj => obj.id === id)
+    const updatedObj = { ...blogs[objIndex], likes: blogObject.likes}
 
-const updatedBlogs = [
-  ...blogs.slice(0, objIndex),
-  updatedObj,
-  ...blogs.slice(objIndex + 1),
-]
+    const updatedBlogs = [
+      ...blogs.slice(0, objIndex),
+      updatedObj,
+      ...blogs.slice(objIndex + 1),
+    ]
 
     blogService
       .like(blogObject, id)
+      .then(returnedBlog => {
+        setBlogs(updatedBlogs)
+      })
+  }
+
+  const removeBlog = (id) => {
+    const updatedBlogs = blogs.filter(obj => obj.id !== id )
+
+    blogService
+      .remove(id)
       .then(returnedBlog => {
         setBlogs(updatedBlogs)
       })
@@ -147,7 +157,7 @@ const updatedBlogs = [
       {blogs.sort(function (a, b) {
   return b.likes - a.likes;
 }).map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={removeBlog} user={user}/>
       )}
     </div>
   )
