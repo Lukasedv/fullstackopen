@@ -86,6 +86,29 @@ describe('Blog app', function() {
         cy.contains('a third blog to like by cypress').parent().contains('Show').click()
         cy.contains('a third blog to like by cypress').parent().should('not.contain', 'Remove')
       })
+
+      it('blogs are ordered by amount of likes', function () {
+        cy.contains('a blog to like by cypress').parent().contains('Show').click()
+        cy.contains('a second blog to like by cypress').parent().contains('Show').click()
+        cy.contains('a third blog to like by cypress').parent().contains('Show').click()
+
+        cy.contains('a second blog to like by cypress').parent().contains('button', 'Like').click()
+        cy.contains('a second blog to like by cypress').parent().contains('button', 'Like').click()
+        cy.contains('a second blog to like by cypress').parent().contains('button', 'Like').click()
+
+        cy.contains('a third blog to like by cypress').parent().contains('button', 'Like').click()
+        cy.contains('a third blog to like by cypress').parent().contains('button', 'Like').click()
+
+        cy.contains('a blog to like by cypress').parent().contains('button', 'Like').click()
+
+        cy.get('#blog').then(blogs => {
+          cy.wrap(blogs[0]).contains('3')
+          cy.wrap(blogs[1]).contains('2')
+          cy.wrap(blogs[2]).contains('1')
+        })
+
+
+      })
     })
   })
 })
