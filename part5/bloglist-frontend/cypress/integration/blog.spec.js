@@ -52,5 +52,19 @@ describe('Blog app', function() {
       cy.get('#submit-button').click()
       cy.contains('a blog created by cypress')
     })
+
+    describe('and several blog exists', function () {
+      beforeEach(function () {
+        cy.createBlog({ title: 'a blog to like by cypress', author: 'cypress', url: 'localhost:cypress' })
+        cy.createBlog({ title: 'a second blog to like by cypress', author: 'cypress', url: 'localhost:cypress' })
+        cy.createBlog({ title: 'a third blog to like by cypress', author: 'cypress', url: 'localhost:cypress' })
+      })
+
+      it('one of those can be liked', function () {
+        cy.contains('a second blog to like by cypress').parent().contains('Show').click()
+        cy.contains('a second blog to like by cypress').parent().contains('button', 'Like').click()
+        cy.contains('Likes: 1')
+      })
+    })
   })
 })
