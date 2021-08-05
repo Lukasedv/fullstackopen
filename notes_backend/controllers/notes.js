@@ -33,7 +33,7 @@ notesRouter.post('/', async (request, response, next) => {
     content: body.content,
     important: body.important === undefined ? false : body.important,
     date: new Date(),
-    user: user._id
+    user: user.id
   })
 
   const savedNote = await note.save()
