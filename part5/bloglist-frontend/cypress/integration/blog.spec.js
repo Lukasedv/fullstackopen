@@ -6,7 +6,15 @@ describe('Blog app', function() {
       username: 'lukasedv',
       password: 'salainen'
     }
+
+    const user2 = {
+      name: 'Admin',
+      username: 'admin',
+      password: 'salainen'
+    }
+
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.request('POST', 'http://localhost:3003/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -64,6 +72,19 @@ describe('Blog app', function() {
         cy.contains('a second blog to like by cypress').parent().contains('Show').click()
         cy.contains('a second blog to like by cypress').parent().contains('button', 'Like').click()
         cy.contains('Likes: 1')
+      })
+
+      it('one of those can be deleted', function () {
+        cy.contains('a third blog to like by cypress').parent().contains('Show').click()
+        cy.contains('a third blog to like by cypress').parent().contains('button', 'Remove').click()
+        cy.get('html').should('not.contain', 'a third blog to like by cypress')
+      })
+
+      it('one of those can not be deleted by wrong user', function () {
+        cy.contains('log out').click()
+        cy.login({ username: 'admin', password: 'salainen' })
+        cy.contains('a third blog to like by cypress').parent().contains('Show').click()
+        cy.contains('a third blog to like by cypress').parent().should('not.contain', 'Remove')
       })
     })
   })
