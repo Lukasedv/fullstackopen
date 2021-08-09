@@ -10,9 +10,7 @@ const Notification = () => {
   }
 
   if(notification === null) {
-    return (
-      <div></div>
-    )
+    return null
   }
   return (
     <div style={style}>
