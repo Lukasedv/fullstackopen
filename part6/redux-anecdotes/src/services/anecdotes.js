@@ -8,9 +8,19 @@ const getAll = async () => {
 }
 
 const createNew = async (content) => {
-    const object = { content, votes: 0 }
+  
+    const getId = () => (100000 * Math.random()).toFixed(0)
+    const object = { content, votes: 0, id: getId() }
     const response = await axios.post(baseUrl, object)
     return response.data
-  }
+}
 
-export default { getAll, createNew }
+const voteFor = async (anecdote) => {
+  console.log(anecdote)
+  const updatedAnecdote = {...anecdote, votes: anecdote.votes + 1}
+  console.log(updatedAnecdote)
+    const response = await axios.put(baseUrl + '/' + updatedAnecdote.id, updatedAnecdote)
+    return response.data
+}
+
+export default { getAll, createNew, voteFor }
