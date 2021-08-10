@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://lukasedv-fullstackopen-75rp966924vg-3001.githubpreview.dev/anecdotes'
+const baseUrl = 'http://localhost:3001/anecdotes'
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)
@@ -16,11 +16,9 @@ const createNew = async (content) => {
 }
 
 const voteFor = async (anecdote) => {
-  console.log(anecdote)
   const updatedAnecdote = {...anecdote, votes: anecdote.votes + 1}
-  console.log(updatedAnecdote)
-    const response = await axios.put(baseUrl + '/' + updatedAnecdote.id, updatedAnecdote)
-    return response.data
+  const response = await axios.put(baseUrl + '/' + updatedAnecdote.id, updatedAnecdote)
+  return response.data
 }
 
 export default { getAll, createNew, voteFor }
