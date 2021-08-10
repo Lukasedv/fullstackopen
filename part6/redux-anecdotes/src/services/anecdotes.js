@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/anecdotes'
+const baseUrl = 'https://lukasedv-fullstackopen-75rp966924vg-3001.githubpreview.dev/anecdotes'
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)
