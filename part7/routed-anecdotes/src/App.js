@@ -8,6 +8,25 @@ import {
   useHistory,
 } from "react-router-dom"
 
+const Notification = ({notification}) => {
+  const notificationToShow = () => {
+    if ( notification === '' ) {
+      return ''
+    }
+    return <div style={style}>{notification}</div> 
+  }
+
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1
+  }
+
+  return (
+      notificationToShow()
+  )
+}
+
 const Menu = () => {
   const padding = {
     paddingRight: 5
@@ -61,6 +80,8 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -70,6 +91,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -131,6 +153,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`Created new anecdote "${anecdote.content}"`)
+    setTimeout(() => {
+      setNotification('')
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -156,6 +182,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+      <Notification notification={notification}/>
       <Menu />
       <Switch>
       <Route path="/anecdotes/:id">
