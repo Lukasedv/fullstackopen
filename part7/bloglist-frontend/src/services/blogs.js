@@ -30,12 +30,12 @@ const like = async (blog) => {
   return response.data
 }
 
-const remove = async (id) => {
+const remove = async (blog) => {
   const config = {
     headers: { Authorization: token },
   }
 
-  const deleteUrl = baseUrl + '/' + id
+  const deleteUrl = baseUrl + '/' + blog.id
 
   const response = await axios.delete(deleteUrl, config)
   return response.data

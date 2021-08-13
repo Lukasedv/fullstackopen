@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog } from '../reducers/blogReducer'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { timedNotification } from '../reducers/notificationReducer'
 
 const BlogList = () => {
@@ -12,6 +12,12 @@ const BlogList = () => {
     dispatch(likeBlog(blog))
     dispatch(timedNotification(`Voted for blog "${blog.title}"`, 5000))
   }
+
+  const remove = (blog) => {
+    dispatch(deleteBlog(blog))
+    dispatch(timedNotification(`Deleted blog "${blog.title}"`, 5000))
+  }
+
   if (!blogs) {
     return null
   }
@@ -28,6 +34,7 @@ const BlogList = () => {
           <div>
             has {blog.likes}
             <button onClick={() => like(blog)}>like</button>
+            <button onClick={() => remove(blog)}>remove</button>
           </div>
         </div>
 

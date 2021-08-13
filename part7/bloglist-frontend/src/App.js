@@ -3,48 +3,31 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import { login, logout } from './reducers/userReducer'
 import BlogList from './components/BlogList'
 import { initializeBlogs } from './reducers/blogReducer'
 import { timedNotification } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(initializeBlogs())
     dispatch(timedNotification('', 0))
+    dispatch(login())
   },[dispatch])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   const blogFormRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
-
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUser(user)
+      dispatch(login({ username, password }))
       setUsername('')
       setPassword('')
       dispatch(timedNotification('User logged in', 5000))
@@ -57,19 +40,13 @@ const App = () => {
     event.preventDefault()
 
     try {
-      window.localStorage.removeItem('loggedBlogappUser')
-      blogService.setToken(null)
-      setUser(null)
+      dispatch(logout())
       setUsername('')
       setPassword('')
       dispatch(timedNotification('User logged out', 5000))
     } catch (exception) {
       dispatch(timedNotification('Error logging out', 5000))
     }
-  }
-
-  const addBlog = () => {
-    console.log('adding blog')
   }
 
   const loginForm = () => (
@@ -86,7 +63,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
-      <BlogForm createBlog={addBlog}/>
+      <BlogForm />
     </Togglable>
   )
 
