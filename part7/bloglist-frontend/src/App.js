@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogList from './components/BlogList'
 import { initializeBlogs } from './reducers/blogReducer'
 import { timedNotification } from './reducers/notificationReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -32,11 +32,6 @@ const App = () => {
   }, [])
 
   const blogFormRef = useRef()
-
-  const blogs = useSelector(({ blogs }) => {
-    return blogs
-  })
-
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -75,15 +70,6 @@ const App = () => {
 
   const addBlog = () => {
     console.log('adding blog')
-  }
-
-  const likeBlog = () => {
-    console.log('like blog')
-    dispatch(timedNotification('Liked blog', 5000))
-  }
-
-  const removeBlog = () => {
-    console.log('remove blog')
   }
 
   const loginForm = () => (
@@ -129,11 +115,7 @@ const App = () => {
           {blogForm()}
         </div>
       }
-      {blogs.sort(function (a, b) {
-        return b.likes - a.likes
-      }).map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={removeBlog} user={user}/>
-      )}
+      <BlogList />
     </div>
   )
 }

@@ -7,6 +7,10 @@ const blogReducer = (state = [], action) => {
     return [...state, action.data]
   case 'INIT_BLOGS':
     return action.data
+  case 'LIKE_BLOG': {
+    return state.map(
+      blog => blog.id !== action.data.id ? blog: action.data
+    )}
   default:
     return state
   }
@@ -31,5 +35,16 @@ export const createBlog = content => {
     })
   }
 }
+
+export const likeBlog = blog => {
+  return async dispatch => {
+    const likedBlog = await blogService.like(blog)
+    dispatch({
+      type: 'LIKE_BLOG',
+      data: likedBlog
+    })
+  }
+}
+
 
 export default blogReducer

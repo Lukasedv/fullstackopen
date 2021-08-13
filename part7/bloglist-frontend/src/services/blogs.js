@@ -21,15 +21,12 @@ const create = async blogObject => {
   return response.data
 }
 
-const like = async (likeObject, id) => {
+const like = async (blog) => {
   const config = {
     headers: { Authorization: token },
   }
-
-  const likeUrl = baseUrl + '/' + id
-  console.log(likeUrl)
-
-  const response = await axios.put(likeUrl, likeObject, config)
+  const updatedBlog = { ...blog, likes: blog.likes + 1 }
+  const response = await axios.put(baseUrl + '/' + updatedBlog.id, updatedBlog, config)
   return response.data
 }
 
