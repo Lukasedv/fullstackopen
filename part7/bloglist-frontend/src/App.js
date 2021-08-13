@@ -7,17 +7,19 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { initializeBlogs } from './reducers/blogReducer'
+import { timedNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
 
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(timedNotification('', 0))
   },[dispatch])
 
   useEffect(() => {
@@ -50,16 +52,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setMessage('Logged in successfully')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(timedNotification('User logged in', 5000))
     } catch (exception) {
-      setMessage('Wrong username or password')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-
+      dispatch(timedNotification('Wrong username or password', 5000))
     }
   }
 
@@ -72,15 +67,9 @@ const App = () => {
       setUser(null)
       setUsername('')
       setPassword('')
-      setMessage('Logged out')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(timedNotification('User logged out', 5000))
     } catch (exception) {
-      setMessage('Error logging out')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(timedNotification('Error logging out', 5000))
     }
   }
 
@@ -90,6 +79,7 @@ const App = () => {
 
   const likeBlog = () => {
     console.log('like blog')
+    dispatch(timedNotification('Liked blog', 5000))
   }
 
   const removeBlog = () => {
@@ -118,7 +108,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={message} />
+        <Notification />
         {user === null && loginForm()}
       </div>
     )
@@ -128,7 +118,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={message} />
+      <Notification />
       {user === null ?
         loginForm() :
         <div>
