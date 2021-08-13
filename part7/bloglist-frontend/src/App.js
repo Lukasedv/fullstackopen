@@ -6,20 +6,19 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { initializeBlogs } from './reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
-
+  const dispatch = useDispatch()
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    dispatch(initializeBlogs())
+  },[dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -31,6 +30,10 @@ const App = () => {
   }, [])
 
   const blogFormRef = useRef()
+
+  const blogs = useSelector(({ blogs }) => {
+    return blogs
+  })
 
 
   const handleLogin = async (event) => {
@@ -81,40 +84,16 @@ const App = () => {
     }
   }
 
-  const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-      })
+  const addBlog = () => {
+    console.log('adding blog')
   }
 
-  const likeBlog = (blogObject, id) => {
-    const objIndex = blogs.findIndex(obj => obj.id === id)
-    const updatedObj = { ...blogs[objIndex], likes: blogObject.likes }
-
-    const updatedBlogs = [
-      ...blogs.slice(0, objIndex),
-      updatedObj,
-      ...blogs.slice(objIndex + 1),
-    ]
-
-    blogService
-      .like(blogObject, id)
-      .then(
-        setBlogs(updatedBlogs)
-      )
+  const likeBlog = () => {
+    console.log('like blog')
   }
 
-  const removeBlog = (id) => {
-    const updatedBlogs = blogs.filter(obj => obj.id !== id )
-
-    blogService
-      .remove(id)
-      .then(
-        setBlogs(updatedBlogs)
-      )
+  const removeBlog = () => {
+    console.log('remove blog')
   }
 
   const loginForm = () => (
