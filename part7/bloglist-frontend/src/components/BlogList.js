@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { timedNotification } from '../reducers/notificationReducer'
+import { Link } from 'react-router-dom'
 
 const BlogList = () => {
   const dispatch = useDispatch()
@@ -24,21 +25,19 @@ const BlogList = () => {
 
   return(
     <div>
-      {blogs.sort(function (a, b) {
-        return b.likes - a.likes
-      }).map(blog =>
-        <div key={blog.id}>
-          <div>
-            {blog.title}
-          </div>
-          <div>
-            has {blog.likes}
+      <ul>
+        {blogs.sort(function (a, b) {
+          return b.likes - a.likes
+        }).map(blog =>
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            <span> has {blog.likes} likes</span>
             <button onClick={() => like(blog)}>like</button>
             <button onClick={() => remove(blog)}>remove</button>
-          </div>
-        </div>
+          </li>
 
-      )}
+        )}
+      </ul>
     </div>
   )
 }

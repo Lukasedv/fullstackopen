@@ -8,6 +8,9 @@ import BlogList from './components/BlogList'
 import { initializeBlogs } from './reducers/blogReducer'
 import { timedNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  Switch, Route, Link
+} from 'react-router-dom'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -61,12 +64,6 @@ const App = () => {
     </Togglable>
   )
 
-  const blogForm = () => (
-    <Togglable buttonLabel='new blog' ref={blogFormRef}>
-      <BlogForm />
-    </Togglable>
-  )
-
   if (user === null) {
     return (
       <div>
@@ -77,22 +74,29 @@ const App = () => {
     )
   }
 
+  const padding = { padding: 5 }
 
   return (
     <div>
-      <h2>blogs</h2>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user === null ?
+          loginForm() :
+          <em> {user.name} logged in <button onClick={handleLogout} type="logout">log out</button></em>
+        }
+      </div>
       <Notification />
-      {user === null ?
-        loginForm() :
-        <div>
-          <p>
-            {user.name} logged in
-            <button onClick={handleLogout} type="logout">log out</button>
-          </p>
-          {blogForm()}
-        </div>
-      }
-      <BlogList />
+      <h2>blogs</h2>
+      <Switch>
+        <Route path="/">
+          <BlogList />
+          <Togglable buttonLabel='new blog' ref={blogFormRef}>
+            <BlogForm />
+          </Togglable>
+        </Route>
+
+      </Switch>
     </div>
   )
 }
