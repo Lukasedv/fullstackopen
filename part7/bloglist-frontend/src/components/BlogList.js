@@ -35,7 +35,6 @@ const BlogList = () => {
             <button onClick={() => like(blog)}>like</button>
             <button onClick={() => remove(blog)}>remove</button>
           </li>
-
         )}
       </ul>
     </div>
