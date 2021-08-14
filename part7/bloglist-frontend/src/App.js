@@ -6,18 +6,20 @@ import Togglable from './components/Togglable'
 import { login, logout } from './reducers/userReducer'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
+import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
 import { getAllUsers } from './reducers/usersReducer'
 import { timedNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  Switch, Route, Link
+  Switch, Route, Link, useRouteMatch
 } from 'react-router-dom'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
 
   const dispatch = useDispatch()
 
@@ -67,6 +69,11 @@ const App = () => {
     </Togglable>
   )
 
+  const match = useRouteMatch('/users/:id')
+  const filterUser = match
+    ? users.find(user => user.id === Number(match.params.id))
+    : null
+
   if (user === null) {
     return (
       <div>
@@ -80,7 +87,7 @@ const App = () => {
   const padding = { padding: 5 }
 
   return (
-    <div>
+    <div className="container">
       <div>
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/users">users</Link>
@@ -92,6 +99,9 @@ const App = () => {
       <Notification />
       <h2>blogs</h2>
       <Switch>
+        <Route path="/users/:id">
+          <User filterUser={filterUser} />
+        </Route>
         <Route path='/users'>
           <UserList />
         </Route>
