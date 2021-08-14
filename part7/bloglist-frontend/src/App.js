@@ -5,7 +5,9 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { login, logout } from './reducers/userReducer'
 import BlogList from './components/BlogList'
+import UserList from './components/UserList'
 import { initializeBlogs } from './reducers/blogReducer'
+import { getAllUsers } from './reducers/usersReducer'
 import { timedNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -21,6 +23,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(getAllUsers())
     dispatch(timedNotification('', 0))
     dispatch(login())
   },[dispatch])
@@ -89,6 +92,9 @@ const App = () => {
       <Notification />
       <h2>blogs</h2>
       <Switch>
+        <Route path='/users'>
+          <UserList />
+        </Route>
         <Route path="/">
           <BlogList />
           <Togglable buttonLabel='new blog' ref={blogFormRef}>
